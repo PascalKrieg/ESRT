@@ -77,7 +77,6 @@ namespace ESRT
 
         public (byte r, byte g, byte b) ToTristimulus()
         {
-            Clamp();
             return ((byte)Math.Round(r * 255), (byte)Math.Round(g * 255), (byte)Math.Round(b * 255));
         }
 
