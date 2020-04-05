@@ -54,7 +54,7 @@ namespace ESRT.Rendering
             return hitPoint.Material.Color(hitPoint.TextureCoords);
         }
 
-        protected override Color calculateNoHitColor(HitData hitPoint)
+        protected override Color calculateNoHitColor(Ray ray)
         {
             return CurrentScene.SkyColor;
         }

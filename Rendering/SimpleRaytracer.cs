@@ -24,7 +24,7 @@ namespace ESRT.Rendering
             return Math.Max(0, (hitPoint.Normal * CurrentScene.MainCamera.ViewDirection)) * hitPoint.Material.Color(hitPoint.TextureCoords.u, hitPoint.TextureCoords.v);
         }
 
-        protected override Color calculateNoHitColor(HitData hitPoint)
+        protected override Color calculateNoHitColor(Ray ray)
         {
             return CurrentScene.SkyColor;
         }

@@ -1,4 +1,4 @@
-﻿using ESRT.Entities;
+using ESRT.Entities;
 using ESRT.Entities.Lighting;
 using System;
 using System.Collections.Generic;
@@ -75,13 +75,13 @@ namespace ESRT.Rendering
             }
             else
             {
-                return calculateNoHitColor(closestHit);
+                return calculateNoHitColor(new Ray(start, direction));
             }
         }
 
         protected abstract Color calculateDefaultColor(HitData hitPoint);
         protected abstract Color calculateColorPerLight(HitData hitPoint, ILight light, bool isCovered);
-        protected abstract Color calculateNoHitColor(HitData hitPoint);
+        protected abstract Color calculateNoHitColor(Ray ray);
 
     }
 }
