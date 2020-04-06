@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,11 +15,9 @@ namespace ESRT.Rendering
         Bitmap image;
         Raytracer raytracer;
 
-        Scene scene { get; set; }
 
         public Renderer(Raytracer raytracer)
         {
-            this.scene = raytracer.CurrentScene;
             this.settings = raytracer.Settings;
             this.raytracer = raytracer;
             image = new Bitmap(settings.Resolution.width, settings.Resolution.height, PixelFormat.Format24bppRgb);
