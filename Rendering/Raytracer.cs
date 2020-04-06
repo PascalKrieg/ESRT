@@ -22,7 +22,8 @@ namespace ESRT.Rendering
 
         public Color Trace(Vector3 start, Vector3 direction)
         {
-            if (CurrentScene.Intersect(start, direction, out HitData closestHit))
+            Ray ray = new Ray(start, direction);
+            if (CurrentScene.Intersect(ray, out HitData closestHit))
             {
                 Color color = Color.Black;
                 color += calculateDefaultColor(closestHit);
@@ -45,7 +46,7 @@ namespace ESRT.Rendering
             }
             else
             {
-                return calculateNoHitColor(new Ray(start, direction));
+                return calculateNoHitColor(ray);
             }
         }
 
