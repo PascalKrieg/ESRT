@@ -1,4 +1,4 @@
-using ESRT.Entities;
+﻿using ESRT.Entities;
 using ESRT.Entities.Lighting;
 using System;
 using System.Collections.Generic;
@@ -22,55 +22,25 @@ namespace ESRT.Rendering
 
         public Color Trace(Vector3 start, Vector3 direction)
         {
-            HitData closestHit = null;
-            HitData lastHit;
-            CurrentScene.ObjectList.ForEach((IIntersectable) =>
-            {
-                if (IIntersectable.Intersect(start, direction, out lastHit))
-                {
-                    if (closestHit != null)
-                    {
-                        if (lastHit.HitPosition.Distance(CurrentScene.MainCamera.Position) < closestHit.HitPosition.Distance(CurrentScene.MainCamera.Position))
-                        {
-                            closestHit = lastHit;
-                        }
-                    }
-                    else
-                    {
-                        closestHit = lastHit;
-                    }
-                }
-            });
-
-            if (closestHit != null)
+            if (CurrentScene.Intersect(start, direction, out HitData closestHit))
             {
                 Color color = Color.Black;
-
                 color += calculateDefaultColor(closestHit);
 
                 CurrentScene.LightList.ForEach((ILight light) =>
                 {
-                    bool isCovered = false;
-                    foreach(IIntersectable obj in CurrentScene.ObjectList)
-                    {
-                        HitData hit = null;
-                        float LightDistance = light.Position.Distance(closestHit.HitPosition);
-                        Vector3 shadowRayDirection = light.Position - closestHit.HitPosition;
-                        shadowRayDirection.Normalize();
-                        if (obj.Intersect(closestHit.HitPosition + 0.003f * shadowRayDirection, shadowRayDirection, out hit))
-                        {
-                            if (hit.HitPosition.Distance(closestHit.HitPosition) < LightDistance)
-                            {
-                                isCovered = true;
-                                break;
-                            }   
-                        }
+                    float LightDistance = light.Position.Distance(closestHit.HitPosition);
+                    Vector3 shadowRayDirection = light.Position - closestHit.HitPosition;
+                    shadowRayDirection.Normalize();
+
+                    if (CurrentScene.Intersect(closestHit.HitPosition + 0.003f * shadowRayDirection, light.Position, out HitData shadowRayHit)) {
+                        color += calculateColorPerLight(closestHit, light, false);
                     }
-
-                    color += calculateColorPerLight(closestHit, light, isCovered);
-
+                    else
+                    {
+                        color += calculateColorPerLight(closestHit, light, false);
+                    }
                 });
-
                 return color;
             }
             else

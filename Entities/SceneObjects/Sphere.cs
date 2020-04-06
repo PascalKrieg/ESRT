@@ -84,7 +84,7 @@ namespace ESRT.Entities
                 hitData = new HitData(hitPosition, normal, texCoords, material);
             } else
             {
-                hitData = null;
+                hitData = HitData.NoHit;
             }
             return hitFound;
         }

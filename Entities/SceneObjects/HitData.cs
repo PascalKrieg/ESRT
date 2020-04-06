@@ -21,5 +21,23 @@ namespace ESRT.Entities
             TextureCoords = textureCoords;
             Material = material;
         }
+
+        public bool exists()
+        {
+            return this.GetHashCode() != noHit.GetHashCode();
+        }
+        private static HitData noHit;
+        public static HitData NoHit
+        {
+            get
+            {
+                if (noHit == null)
+                {
+                    Material mat = new ConstantMaterial(new Color(1, 0.07f, 0.576f), 1, 0, 0, 0, 0);
+                    noHit = new HitData(Vector3.Zero, Vector3.Up, (0, 0), mat);
+                }
+                return noHit;
+            }
+        }
     }
 }
