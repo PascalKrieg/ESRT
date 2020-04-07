@@ -39,7 +39,7 @@ namespace ESRT.Rendering
                     }
                     else
                     {
-                        color += calculateColorPerLight(closestHit, light, false);
+                        color += calculateColorPerLight(closestHit, light, true);
                     }
                 });
                 return color;

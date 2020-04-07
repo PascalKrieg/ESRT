@@ -33,11 +33,12 @@ namespace ESRT.Rendering
             {
                 if (IIntersectable.Intersect(ray.Start, ray.Direction, out lastHit))
                 {
-                    if (closestHit.exists() && (lastHit.HitPosition.Distance(ray.Start) < closestHit.HitPosition.Distance(ray.Start)))
+                    if (!closestHit.exists() && lastHit.exists())
                     {
                         closestHit = lastHit;
+                        return;
                     }
-                    else
+                    if (ray.Start.Distance(lastHit.HitPosition) < ray.Start.Distance(closestHit.HitPosition))
                     {
                         closestHit = lastHit;
                     }
