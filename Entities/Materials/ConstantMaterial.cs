@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ESRT.Entities.Materials
 {
+    /// <summary>
+    /// A Material that returns a constant value on every coordinate.
+    /// </summary>
     public class ConstantMaterial : Material
     {
         private Color color;

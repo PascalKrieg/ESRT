@@ -51,7 +51,7 @@ namespace ESRT.Rendering
         private void setPixel(int x, int y, Color color)
         {
             int offset = (3 * raytracer.Settings.Resolution.width * y) + 3 * x;
-            (byte r, byte g, byte b) tristimulus = color.ToTristimulus();
+            (byte r, byte g, byte b) tristimulus = color.To24BitRepresentation();
             *(rawData + offset) = tristimulus.b;
             *(rawData + offset + 1) = tristimulus.g;
             *(rawData + offset + 2) = tristimulus.r;

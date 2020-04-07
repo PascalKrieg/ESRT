@@ -8,21 +8,41 @@ namespace ESRT
 {
     public class Color
     {
+        /// <summary>
+        /// The Red component as value in interval [0, 1]. Can be outside this interval.
+        /// </summary>
         public float r { get; set; }
+        /// <summary>
+        /// The Green component as value in interval [0, 1]. Can be outside this interval.
+        /// </summary>
         public float g { get; set; }
+        /// <summary>
+        /// The Blue component as value in interval [0, 1]. Can be outside this interval.
+        /// </summary>
         public float b { get; set; }
 
+        /// <summary>
+        /// Creates an RGB Color instance using values [0, 1]. Can be outside this interval for usage in some edge cases (like bloom).
+        /// </summary>
+        /// <param name="r">Red component</param>
+        /// <param name="g">Green component</param>
+        /// <param name="b">Blue component</param>
         public Color(float r, float g, float b)
         {
             this.r = r;
             this.g = g;
             this.b = b;
         }
-        public Color(Vector3 tristimulus)
+
+        /// <summary>
+        /// Creates an RGB Color instance using values [0, 1]. Can be outside this interval for usage in some edge cases (like bloom).
+        /// </summary>
+        /// <param name="values">The Vector containing the values</param>
+        public Color(Vector3 values)
         {
-            this.r = tristimulus.x;
-            this.g = tristimulus.y;
-            this.b = tristimulus.z;
+            this.r = values.x;
+            this.g = values.y;
+            this.b = values.z;
         }
         public Color(string hexRepresentation)
         {
@@ -75,7 +95,11 @@ namespace ESRT
             }
         }
 
-        public (byte r, byte g, byte b) ToTristimulus()
+        /// <summary>
+        /// Converts the Color to a tuple of components, usually in intervals [0, 255]. The Values can ocassionaly be higher than 255.
+        /// </summary>
+        /// <returns>The tuple of components, usually in intervals [0, 255]</returns>
+        public (byte r, byte g, byte b) To24BitRepresentation()
         {
             return ((byte)Math.Round(r * 255), (byte)Math.Round(g * 255), (byte)Math.Round(b * 255));
         }
