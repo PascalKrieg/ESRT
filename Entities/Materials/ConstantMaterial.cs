@@ -48,6 +48,16 @@ namespace ESRT.Entities.Materials
             return color;
         }
 
+        public void NormalizeToOne()
+        {
+            float total = ambient + diffuse + specular + reflective + transmissive;
+            ambient /= total;
+            diffuse /= total;
+            specular /= total;
+            reflective /= total;
+            transmissive /= total;
+        }
+
         public ConstantMaterial(Color color, float ambient, float diffuse, float specular, float reflective, float transmissive)
         {
             this.color = color;
