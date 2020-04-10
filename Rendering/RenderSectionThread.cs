@@ -8,6 +8,10 @@ using ESRT.Entities;
 
 namespace ESRT.Rendering
 {
+    /// <summary>
+    /// Class that contains the information required to run the raytracer on a specific rectangle on the bitmap.
+    /// After creation, the Execute method has to be called on a new thread.
+    /// </summary>
     unsafe class RenderSectionThread
     {
         byte* rawData;
@@ -15,9 +19,15 @@ namespace ESRT.Rendering
 
         private Raytracer raytracer;
 
-        Vector3 sidewaysVector;
-        float distance;
-
+        /// <summary>
+        /// Constructs the Object containing target bitmap, rectangle and raytracer to use.
+        /// </summary>
+        /// <param name="rawData">Pointer to the first element of the bitmap raw data.</param>
+        /// <param name="startX">The lower bound of the x values in the rectangle.</param>
+        /// <param name="endX">The upper bound of the x values in the rectangle.</param>
+        /// <param name="startY">The lower bound of the y values in the rectangle.</param>
+        /// <param name="endY">The upper bound of the y values in the rectangle.</param>
+        /// <param name="raytracer">The raytracer to be used to render the image.</param>
         public RenderSectionThread(byte* rawData, int startX, int endX, int startY, int endY, Raytracer raytracer)
         {
             this.rawData = rawData;
@@ -26,24 +36,19 @@ namespace ESRT.Rendering
             this.startY = startY;
             this.endY = endY;
             this.raytracer = raytracer;
-
-            distance = (float)Math.Tan((Math.PI / 360) * raytracer.CurrentScene.MainCamera.FieldOfView) * raytracer.Settings.Resolution.width / 2;
-            raytracer.CurrentScene.MainCamera.Up.Normalize();
-            raytracer.CurrentScene.MainCamera.ViewDirection.Normalize();
-            sidewaysVector = ( -1 * raytracer.CurrentScene.MainCamera.ViewDirection ).CrossProduct( raytracer.CurrentScene.MainCamera.Up );
-            sidewaysVector.Normalize();
         }
 
+        /// <summary>
+        /// Starts rendering the image in the assigned rectangle, using the given raytracer.
+        /// The result will be written to the correct index at the rawData memory address.
+        /// </summary>
         public void Execute()
         {
-            
             for (int y = startY; y < endY; y++)
             {
                 for (int x = startX; x < endX; x++)
                 {
-                    Vector3 rayDirection = generateRay(x, y);
-                    Color color = raytracer.Trace(raytracer.CurrentScene.MainCamera.Position, rayDirection);
-                    setPixel(x, y, color);
+                    setPixel(x, y, raytracer.CalculatePixelColor(x, y));
                 }
             }
         }
@@ -55,15 +60,6 @@ namespace ESRT.Rendering
             *(rawData + offset) = tristimulus.b;
             *(rawData + offset + 1) = tristimulus.g;
             *(rawData + offset + 2) = tristimulus.r;
-        }
-
-        private Vector3 generateRay(int x, int y)
-        {
-            int xSteps = x - (int)(raytracer.Settings.Resolution.width / 2);
-            int ySteps = y - (int)(raytracer.Settings.Resolution.height / 2);
-            Vector3 result = -1 * distance * raytracer.CurrentScene.MainCamera.ViewDirection + xSteps * sidewaysVector + ySteps * raytracer.CurrentScene.MainCamera.Up;
-            result.Normalize();
-            return result;
         }
     }
 }

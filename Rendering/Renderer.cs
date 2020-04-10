@@ -9,13 +9,19 @@ using System.Threading;
 
 namespace ESRT.Rendering
 {
+    /// <summary>
+    /// Class that abstracts the usage of a raytracer down to a simple Render method that returns the rendered image.
+    /// </summary>
     public unsafe class Renderer
     {
         RenderSettings settings;
         Bitmap image;
         Raytracer raytracer;
 
-
+        /// <summary>
+        /// Constructs a Renderer object.
+        /// </summary>
+        /// <param name="raytracer">The Raytracer to be used. Has to be fully initialized.</param>
         public Renderer(Raytracer raytracer)
         {
             this.settings = raytracer.Settings;
@@ -23,6 +29,10 @@ namespace ESRT.Rendering
             image = new Bitmap(settings.Resolution.width, settings.Resolution.height, PixelFormat.Format24bppRgb);
         }
 
+        /// <summary>
+        /// Renders the scene that is set in the raytracer object.
+        /// </summary>
+        /// <returns>Returns the rendered image.</returns>
         public Bitmap RenderImage()
         {
             BitmapData sourceData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);

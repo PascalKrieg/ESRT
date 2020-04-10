@@ -8,24 +8,37 @@ using System.Threading.Tasks;
 
 namespace ESRT.Rendering
 {
-
+    
     public abstract class Raytracer
     {
         public Scene CurrentScene { get; set; }
         public RenderSettings Settings { get; set; }
 
+        Vector3 sidewaysVector;
+        float distance;
+
         public Raytracer(Scene currentScene, RenderSettings settings)
         {
             CurrentScene = currentScene;
             Settings = settings;
+
+            distance = (float)Math.Tan((Math.PI / 360) * CurrentScene.MainCamera.FieldOfView) * Settings.Resolution.width / 2;
+            CurrentScene.MainCamera.Up.Normalize();
+            CurrentScene.MainCamera.ViewDirection.Normalize();
+            sidewaysVector = (-1 * CurrentScene.MainCamera.ViewDirection).CrossProduct(CurrentScene.MainCamera.Up);
+            sidewaysVector.Normalize();
         }
 
-        public Color Trace(Vector3 start, Vector3 direction, int recursionDepth = 0)
+        public Color CalculatePixelColor(int x, int y)
         {
-            return Trace(new Ray(start, direction), recursionDepth);
+            int xSteps = x - (int)(Settings.Resolution.width / 2);
+            int ySteps = y - (int)(Settings.Resolution.height / 2);
+            Vector3 result = -1 * distance * CurrentScene.MainCamera.ViewDirection + xSteps * sidewaysVector + ySteps * CurrentScene.MainCamera.Up;
+            result.Normalize();
+            return Trace(new Ray(CurrentScene.MainCamera.Position, result));
         }
 
-        public Color Trace(Ray ray, int recursionDepth = 0)
+        protected Color Trace(Ray ray, int recursionDepth = 0)
         {
             if (recursionDepth > Settings.RecursionDepth)
             {
