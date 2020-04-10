@@ -10,13 +10,37 @@ using ESRT.Environment;
 
 namespace ESRT.Rendering
 {
+    /// <summary>
+    /// Class that contains all scene objects and lights, aswell as other scene related information.
+    /// This class also handles data structures to accelerate intersection tests.
+    /// </summary>
     public class Scene
     {
+        /// <summary>
+        /// The environment that can be used to calculate the color of the surroundings.
+        /// </summary>
         public IEnvironment Environment { get; set; }
+
+        /// <summary>
+        /// The main camera that will be used to render this scene.
+        /// </summary>
         public Camera MainCamera { get; set; }
+
+        /// <summary>
+        /// The list of all Visible objects contained in the scene.
+        /// </summary>
         public List<IIntersectable> ObjectList { get; set; }
+
+        /// <summary>
+        /// The list of all light sources contained in the scene.
+        /// </summary>
         public List<ILight> LightList { get; set; }
 
+        /// <summary>
+        /// Creates an empty scene, containing only a camera and an environment surrounding it.
+        /// </summary>
+        /// <param name="environment">The environment.</param>
+        /// <param name="mainCamera">The camera used to render.</param>
         public Scene(IEnvironment environment, Camera mainCamera)
         {
             Environment = environment;
@@ -25,6 +49,13 @@ namespace ESRT.Rendering
             LightList = new List<ILight>();
         }
 
+        /// <summary>
+        /// Intersect a ray with scene objects. Writes out hit data.
+        /// </summary>
+        /// <param name="ray">The ray that will be intersected with the scene.</param>
+        /// <param name="hitData">The hit data of the closest hit that will be written out if there is an intersection.
+        /// Will output HitData.NoHit otherwise and can be checked with the exists() method on the object.</param>
+        /// <returns>Returns true, if there is an intersection with at least one scene object, false otherwise.</returns>
         public bool Intersect(Ray ray, out HitData hitData)
         {
             // TODO: Use acceleration Data structures
@@ -32,14 +63,14 @@ namespace ESRT.Rendering
             HitData lastHit;
             ObjectList.ForEach((IIntersectable) =>
             {
-                if (IIntersectable.Intersect(ray.Start, ray.Direction, out lastHit))
+                if (IIntersectable.Intersect(ray, out lastHit))
                 {
                     if (!closestHit.exists() && lastHit.exists())
                     {
                         closestHit = lastHit;
                         return;
                     }
-                    if (ray.Start.Distance(lastHit.HitPosition) < ray.Start.Distance(closestHit.HitPosition))
+                    if (ray.Start.Distance(lastHit.Position) < ray.Start.Distance(closestHit.Position))
                     {
                         closestHit = lastHit;
                     }
@@ -50,6 +81,16 @@ namespace ESRT.Rendering
             return hitData.exists();
         }
 
+        /// <summary>
+        /// Intersect a line between two positions with scene objects. Writes out hit data.
+        /// </summary>
+        /// <param name="startPosition">The start position of the line.</param>
+        /// <param name="targetPosition">The end position of the line.</param>
+        /// <param name="hitData">The hit data of the closest hit that will be written out if there is an intersection.
+        /// If there is an intersection behind the target position, that hit data will still be written out.
+        /// Will output HitData.NoHit if there was no hit at all, which can be checked with the exists() method on the object.</param>
+        /// <returns>Returns true, if there is an intersection with at least one scene object 
+        /// between startPosition and targetPosition, false otherwise.</returns>
         public bool Intersect(Vector3 startPosition, Vector3 targetPosition, out HitData hitData)
         {
             Ray ray = new Ray(startPosition, targetPosition - startPosition);
@@ -57,7 +98,7 @@ namespace ESRT.Rendering
             if (Intersect(ray, out HitData hit))
             {
                 hitData = hit;
-                return (startPosition.Distance(hit.HitPosition) < startPosition.Distance(targetPosition));
+                return (startPosition.Distance(hit.Position) < startPosition.Distance(targetPosition));
             } 
             else
             {

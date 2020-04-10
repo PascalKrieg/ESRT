@@ -7,14 +7,32 @@ using ESRT.Entities.Materials;
 
 namespace ESRT.Entities
 {
+    /// <summary>
+    /// A Sphere object that can be placed in a scene.
+    /// </summary>
     public class Sphere : IIntersectable
     {
+        /// <summary>
+        /// The material of the Spere.
+        /// </summary>
         public Material material { get; private set;}
 
+        /// <summary>
+        /// The center of the Sphere.
+        /// </summary>
         public Vector3 Center { get; set; }
 
+        /// <summary>
+        /// The radius of the sphere.
+        /// </summary>
         public float Radius { get; set; }
 
+        /// <summary>
+        /// Constructs a new sphere.
+        /// </summary>
+        /// <param name="material"> The material of the Spere.</param>
+        /// <param name="center">The center of the Sphere.</param>
+        /// <param name="radius">The radius of the sphere.</param>
         public Sphere(Material material, Vector3 center, float radius)
         {
             this.material = material;
@@ -22,8 +40,10 @@ namespace ESRT.Entities
             Radius = radius;
         }
 
-        public bool Intersect(Vector3 incomingStart, Vector3 incomingDirection, out HitData hitData)
+        public bool Intersect(Ray ray, out HitData hitData)
         {
+            Vector3 incomingStart = ray.Start;
+            Vector3 incomingDirection = ray.Direction;
             bool hitFound = false;
 
             float a = incomingDirection * incomingDirection;

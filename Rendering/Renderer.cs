@@ -35,14 +35,15 @@ namespace ESRT.Rendering
         /// <returns>Returns the rendered image.</returns>
         public Bitmap RenderImage()
         {
-            BitmapData sourceData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            byte* sourcePointer = (byte*)sourceData.Scan0.ToPointer();
+            // Prepare frame buffer
+            BitmapData frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            byte* bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
 
+            // Start threads with the correct sections
             Thread[] threads = new Thread[settings.AmountThreads];
-
             for (int i = 0; i < settings.AmountThreads; i++)
             {
-                RenderSectionThread rst = new RenderSectionThread(sourcePointer,
+                RenderSectionParameters rst = new RenderSectionParameters(bufferPointer,
                     0, (i + 1) * (settings.Resolution.width / settings.AmountThreads),
                     0, settings.Resolution.height, raytracer);
 
@@ -50,12 +51,14 @@ namespace ESRT.Rendering
                 threads[i].Start();
             }
 
+            // Wait for every thread to finish
             for (int i = 0; i < threads.Length; i++)
             {
                 threads[i].Join();
             }
 
-            image.UnlockBits(sourceData);
+            // Convert buffer back to Bitmap
+            image.UnlockBits(frameBuffer);
 
             return image;
         }

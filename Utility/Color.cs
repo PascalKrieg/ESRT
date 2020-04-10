@@ -67,6 +67,9 @@ namespace ESRT
             return new Color(a * color.r, a * color.g, a * color.b);
         }
 
+        /// <summary>
+        /// Limits all values between 0 and 1.
+        /// </summary>
         public void Clamp()
         {
             if (r > 1f)

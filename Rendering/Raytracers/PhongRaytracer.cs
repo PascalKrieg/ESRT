@@ -8,6 +8,9 @@ using ESRT.Entities.Lighting;
 
 namespace ESRT.Rendering
 {
+    /// <summary>
+    /// A raytracer that implements the phong lighting model.
+    /// </summary>
     public class PhongRaytracer : Raytracer
     {
         public float PhongExponent = 4;
@@ -16,13 +19,13 @@ namespace ESRT.Rendering
         {
         }
 
-        protected override Color calculateColorPerLight(HitData hitPoint, ILight light, bool isCovered)
+        protected override Color calculateColorPerLight(Ray ray, HitData hitPoint, ILight light, bool isCovered)
         {
-            if (!Settings.UseLighing)
+            if (!Settings.CastShadows)
                 return Color.Black;
 
-            Vector3 lightDirection = Vector3.Normalize(hitPoint.HitPosition - light.Position);
-            Color lightIntensity = (float)(1 / Math.Pow(Vector3.Distance(hitPoint.HitPosition, light.Position), 2)) * light.GetIntensity(lightDirection);
+            Vector3 lightDirection = Vector3.Normalize(hitPoint.Position - light.Position);
+            Color lightIntensity = (float)(1 / Math.Pow(Vector3.Distance(hitPoint.Position, light.Position), 2)) * light.GetIntensity(lightDirection);
 
             Color ambient = lightIntensity * hitPoint.Material.Ambient(hitPoint.TextureCoords);
             Color diffuse = Color.Black;
@@ -45,9 +48,9 @@ namespace ESRT.Rendering
             return new Color(Math.Min(lightInflux.r, color.r), Math.Min(lightInflux.g, color.g), Math.Min(lightInflux.b, color.b));
         }
 
-        protected override Color calculateDefaultColor(HitData hitPoint)
+        protected override Color calculateDefaultColor(Ray ray, HitData hitPoint)
         {
-            if (Settings.UseLighing)
+            if (Settings.CastShadows)
             {
                 return Color.Black;
             }
