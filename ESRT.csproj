@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Environment\IEnvironment.cs" />
+    <Compile Include="Environment\SolidColorEnvironment.cs" />
     <Compile Include="Entities\Materials\ConstantMaterial.cs" />
     <Compile Include="Entities\Materials\GradientMaterial.cs" />
     <Compile Include="Entities\SceneObjects\HitData.cs" />

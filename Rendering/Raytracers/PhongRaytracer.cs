@@ -56,7 +56,7 @@ namespace ESRT.Rendering
 
         protected override Color calculateNoHitColor(Ray ray)
         {
-            return CurrentScene.SkyColor;
+            return CurrentScene.Environment.GetEnvironmentColor(ray);
         }
     }
 }
