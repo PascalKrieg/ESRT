@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ESRT
 {
+    /// <summary>
+    /// Represents a three-dimensional float vector. Contains all neccessary utility methods.
+    /// </summary>
     public class Vector3
     {
         private bool isLengthDirty = false;
@@ -73,6 +76,9 @@ namespace ESRT
             this.z = z;
         }
 
+        /// <summary>
+        /// Shortens the vector to length 1 while still pointing in the same direction.
+        /// </summary>
         public void Normalize()
         {
             float currentLength = Length;
@@ -87,6 +93,11 @@ namespace ESRT
             isLengthDirty = false;
         }
 
+        /// <summary>
+        /// Creates a normalized version of the given vector.
+        /// </summary>
+        /// <param name="vector">The vector to be normalized.</param>
+        /// <returns>Returns the normalized version of the vector.</returns>
         public static Vector3 Normalize(Vector3 vector)
         {
             Vector3 vec = new Vector3(vector.x, vector.y, vector.z);
@@ -94,17 +105,31 @@ namespace ESRT
             return vec;
         }
 
+        /// <summary>
+        /// Calculates the angle between this vector and another one.
+        /// </summary>
+        /// <param name="vec">The vector the angle to will be calculated.</param>
+        /// <returns>Returns the angle between the vectors as radian.</returns>
         public float Angle(Vector3 vec)
         {
             return (float)Math.Acos(this.CosAngle(vec));
         }
 
+        /// <summary>
+        /// Calculates the cosine of the angle between this vector and another one.
+        /// </summary>
+        /// <param name="vec">The vector the cosine angle to will be calculated.</param>
+        /// <returns>Returns the cosine of the angle between the vectors as radian.</returns>
         public float CosAngle(Vector3 vec)
         {
             return (this * vec) / (vec.Length * this.Length);
         }
 
-        public (float u, float v) CalculateAzimut()
+        /// <summary>
+        /// Calculates the azimut out of the Vector.
+        /// </summary>
+        /// <returns>The azimut as float tuple (azimut, elevation) - ([0, 2*Pi], [0, Pi])</returns>
+        public (float azimut, float elevation) CalculateAzimut()
         {
             Vector3 xzProjection = new Vector3(x, 0, z);
 
@@ -136,6 +161,11 @@ namespace ESRT
             return (u, v);
         }
 
+        /// <summary>
+        /// Reflects the Vector on a surface given by it's normal.
+        /// </summary>
+        /// <param name="normal">The normal of the survace the vector will be reflected on.</param>
+        /// <returns>Returns the direction of the reflection.</returns>
         public Vector3 Reflect(Vector3 normal)
         {
             normal.Normalize();
@@ -144,6 +174,12 @@ namespace ESRT
             return result;
         }
 
+        /// <summary>
+        /// Calculates the cross product of two vectors.
+        /// </summary>
+        /// <param name="vec1">First Vector.</param>
+        /// <param name="vec2">Second Vector.</param>
+        /// <returns>Returns the cross product of the two vectors.</returns>
         public static Vector3 CrossProduct(Vector3 vec1, Vector3 vec2)
         {
             float x = vec1.y * vec2.z - vec1.z * vec2.y;
@@ -152,16 +188,32 @@ namespace ESRT
             return new Vector3(x, y, z);
         }
 
+        /// <summary>
+        /// Calculates the cross product of this vector and another.
+        /// </summary>
+        /// <param name="vec">The vector the cross product will be calculated with.</param>
+        /// <returns>Returns the cross product of this vector and another.</returns>
         public Vector3 CrossProduct(Vector3 vec)
         {
             return CrossProduct(this, vec);
         }
 
+        /// <summary>
+        /// Calculates the distance between two vectors.
+        /// </summary>
+        /// <param name="vec1">First Vector.</param>
+        /// <param name="vec2">Second Vector.</param>
+        /// <returns>Returns the distance between the vectors.</returns>
         public static float Distance(Vector3 vec1, Vector3 vec2)
         {
             return vec1.Distance(vec2);
         }
 
+        /// <summary>
+        /// Calculates the distance between this vector and another.
+        /// </summary>
+        /// <param name="vec">Second Vector.</param>
+        /// <returns>Returns the distance between the vectors.</returns>
         public float Distance(Vector3 vec)
         {
             return (this - vec).Length;
@@ -190,13 +242,37 @@ namespace ESRT
             return new Vector3(a * vec.x, a * vec.y, a * vec.z);
         }
 
+        /// <summary>
+        /// Shortcut for the Vector (0, 0, 0).
+        /// </summary>
         public static Vector3 Zero { get => new Vector3(0, 0, 0); }
+        /// <summary>
+        /// Shortcut for the Vector (1, 1, 1).
+        /// </summary>
         public static Vector3 One { get => new Vector3(1, 1, 1); }
+        /// <summary>
+        /// Shortcut for the Vector (0, 1, 0).
+        /// </summary>
         public static Vector3 Up { get => new Vector3(0, 1, 0); }
+        /// <summary>
+        /// Shortcut for the Vector (0, -1, 0).
+        /// </summary>
         public static Vector3 Down { get => new Vector3(0, -1, 0); }
+        /// <summary>
+        /// Shortcut for the Vector (0, 0, 1).
+        /// </summary>
         public static Vector3 Forward { get => new Vector3(0, 0, 1); }
+        /// <summary>
+        /// Shortcut for the Vector (0, 0, -1).
+        /// </summary>
         public static Vector3 Backward { get => new Vector3(0, 0, -1); }
+        /// <summary>
+        /// Shortcut for the Vector (-1, 0, 0).
+        /// </summary>
         public static Vector3 Left { get => new Vector3(-1, 0, 0); }
+        /// <summary>
+        /// Shortcut for the Vector (1, 0, 0).
+        /// </summary>
         public static Vector3 Right { get => new Vector3(1, 0, 0); }
     }
 }
