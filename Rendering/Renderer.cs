@@ -43,11 +43,11 @@ namespace ESRT.Rendering
             Thread[] threads = new Thread[settings.AmountThreads];
             for (int i = 0; i < settings.AmountThreads; i++)
             {
-                RenderSectionParameters rst = new RenderSectionParameters(bufferPointer,
+                RenderSectionParameters renderSection = new RenderSectionParameters(bufferPointer,
                     0, (i + 1) * (settings.Resolution.width / settings.AmountThreads),
                     0, settings.Resolution.height, raytracer);
 
-                threads[i] = new Thread(new ThreadStart(rst.Execute));
+                threads[i] = new Thread(new ThreadStart(renderSection.Execute));
                 threads[i].Start();
             }
 

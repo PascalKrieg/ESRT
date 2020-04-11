@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ESRT.Entities.Lighting
 {
     /// <summary>
-    /// Defines a light source.
+    /// Represents a light source.
     /// </summary>
     public interface ILight
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ESRT.Entities
 {
     /// <summary>
-    /// Describes an Object a ray can be intersected with.
+    /// Represents an object that a ray can be intersected with.
     /// </summary>
     public interface IIntersectable
     {
