@@ -15,9 +15,9 @@ namespace ESRT.Rendering
     /// </summary>
     public unsafe class Renderer
     {
-        RenderSettings settings;
-        Bitmap image;
-        Raytracer raytracer;
+        readonly RenderSettings settings;
+        readonly Bitmap image;
+        readonly Raytracer raytracer;
 
         // Framebuffer related variables
         BitmapData frameBuffer;

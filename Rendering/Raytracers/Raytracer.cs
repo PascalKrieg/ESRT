@@ -17,11 +17,11 @@ namespace ESRT.Rendering
         /// <summary>
         /// The scene that will be rendered by this raytracer instance.
         /// </summary>
-        public Scene CurrentScene { get; set; }
+        public Scene CurrentScene { get; private set; }
         /// <summary>
         /// The settings used to render the scene.
         /// </summary>
-        public RenderSettings Settings { get; set; }
+        public RenderSettings Settings { get; private set; }
 
         // used for ray generation
         Vector3 sidewaysVector;
