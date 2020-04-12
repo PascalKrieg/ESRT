@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace ESRT.Rendering
 {
@@ -21,6 +22,8 @@ namespace ESRT.Rendering
         // Framebuffer related variables
         BitmapData frameBuffer;
         byte* bufferPointer;
+
+        ConcurrentQueue<RenderSection> sectionQueue = new ConcurrentQueue<RenderSection>();
 
         /// <summary>
         /// Constructs a Renderer object.
@@ -60,6 +63,8 @@ namespace ESRT.Rendering
             frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
 
+            sectionQueue = new ConcurrentQueue<RenderSection>();
+
             // Start render threads
             Thread renderThread = new Thread(new ThreadStart(() => RunRenderThreads()));
             renderThread.Start();
@@ -85,14 +90,30 @@ namespace ESRT.Rendering
         {
             // Start threads with the correct sections
             Thread[] threads = new Thread[settings.AmountThreads];
-            int sectionWidth = (settings.Resolution.width / settings.AmountThreads);
+            int sectionWidth = settings.Resolution.width / 8;
+            int sectionHeight = settings.Resolution.height / 8;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    RenderSection renderSection = new RenderSection(bufferPointer,
+                        i * sectionWidth, (i + 1) * sectionWidth,
+                        j * sectionHeight, (j + 1) * sectionHeight, raytracer);
+
+                    sectionQueue.Enqueue(renderSection);
+
+                }
+            }
+
             for (int i = 0; i < settings.AmountThreads; i++)
             {
-                RenderSection renderSection = new RenderSection(bufferPointer,
-                    i * sectionWidth, (i + 1) * sectionWidth,
-                    0, settings.Resolution.height, raytracer);
-
-                threads[i] = new Thread(new ThreadStart(renderSection.CalculateSection));
+                threads[i] = new Thread(new ThreadStart(() =>
+                {
+                    while (sectionQueue.TryDequeue(out RenderSection section))
+                    {
+                        section.CalculateSection();
+                    }
+                }));
                 threads[i].Start();
             }
 
