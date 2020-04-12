@@ -88,23 +88,35 @@ namespace ESRT.Rendering
         /// </summary>
         private void RunRenderThreads()
         {
-            // Start threads with the correct sections
-            Thread[] threads = new Thread[settings.AmountThreads];
-            int sectionWidth = settings.Resolution.width / 8;
-            int sectionHeight = settings.Resolution.height / 8;
-            for (int i = 0; i < 8; i++)
+            int gridResolution = 8;
+
+            // Generate sections
+            int sectionWidth = settings.Resolution.width / gridResolution;
+            int sectionHeight = settings.Resolution.height / gridResolution;
+            for (int i = 0; i < gridResolution; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < gridResolution; j++)
                 {
+                    (int start, int end) xDimensions = (i * sectionWidth, (i + 1) * sectionWidth);
+                    (int start, int end) yDimensions = (j * sectionHeight, (j + 1) * sectionHeight);
+
+                    // Handle edge cases where width and height aren't evenly divisible by the grid resolution
+                    if (i == gridResolution - 1)
+                        xDimensions.end = settings.Resolution.width;
+
+                    if (j == gridResolution - 1)
+                        yDimensions.end = settings.Resolution.height;
+
                     RenderSection renderSection = new RenderSection(bufferPointer,
-                        i * sectionWidth, (i + 1) * sectionWidth,
-                        j * sectionHeight, (j + 1) * sectionHeight, raytracer);
+                        xDimensions.start, xDimensions.end,
+                        yDimensions.start, yDimensions.end, raytracer);
 
                     sectionQueue.Enqueue(renderSection);
-
                 }
             }
 
+            // Start threads with the correct sections
+            Thread[] threads = new Thread[settings.AmountThreads];
             for (int i = 0; i < settings.AmountThreads; i++)
             {
                 threads[i] = new Thread(new ThreadStart(() =>
