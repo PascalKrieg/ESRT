@@ -53,5 +53,37 @@ namespace ESRT.Rendering
         {
             get => new RenderSettings((1920, 1080), 1, 5, 0.003f, true);
         }
+
+        /// <summary>
+        /// Represents a default Setting of 1920x1080 multithreaded rendered image with recursion depth of 5, using 2 threads.
+        /// </summary>
+        public static RenderSettings Default2Threads
+        {
+            get => new RenderSettings((1920, 1080), 2, 5, 0.003f, true);
+        }
+
+        /// <summary>
+        /// Represents a default Setting of 1920x1080 multithreaded rendered image with recursion depth of 5, using 4 threads.
+        /// </summary>
+        public static RenderSettings Default4Threads
+        {
+            get => new RenderSettings((1920, 1080), 4, 5, 0.003f, true);
+        }
+
+        /// <summary>
+        /// Represents a default Setting of 1920x1080 multithreaded rendered image with recursion depth of 5, using 8 threads.
+        /// </summary>
+        public static RenderSettings Default8Threads
+        {
+            get => new RenderSettings((1920, 1080), 8, 5, 0.003f, true);
+        }
+
+        /// <summary>
+        /// Represents a default Setting of 1920x1080 multithreaded rendered image with recursion depth of 5, using 16 threads.
+        /// </summary>
+        public static RenderSettings Default16Threads
+        {
+            get => new RenderSettings((1920, 1080), 16, 5, 0.003f, true);
+        }
     }
 }
