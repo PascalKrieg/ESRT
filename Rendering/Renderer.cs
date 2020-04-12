@@ -18,6 +18,10 @@ namespace ESRT.Rendering
         Bitmap image;
         Raytracer raytracer;
 
+        // Framebuffer related variables
+        BitmapData frameBuffer;
+        byte* bufferPointer;
+
         /// <summary>
         /// Constructs a Renderer object.
         /// </summary>
@@ -29,16 +33,56 @@ namespace ESRT.Rendering
             image = new Bitmap(settings.Resolution.width, settings.Resolution.height, PixelFormat.Format24bppRgb);
         }
 
+
         /// <summary>
         /// Renders the scene that is set in the raytracer object.
         /// </summary>
         /// <returns>Returns the rendered image.</returns>
         public Bitmap RenderImage()
         {
-            // Prepare frame buffer
-            BitmapData frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            byte* bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
+            return RenderImage(new Action<Bitmap>((bitmap) => { } ), 0);
+        }
 
+        /// <summary>
+        /// Renders the scene that is set in the raytracer object.
+        /// Experimental overload: While rendering callbacks will be made to allow for displaying rendering progress.
+        /// The interval can not be set directly, but the minimum interval between callbacks can be set to free more
+        /// CPU time for rendering threads.
+        /// </summary>
+        /// <param name="periodicCallback">Callback method that takes a Bitmap as sole parameter.
+        /// On every call, the method is passed a Bitmap containing the current rendering progress.</param>
+        /// <param name="minimumInterval">Optional. The minimum delay between callbacks.
+        /// This will rarely have a big impact, as generating the intermediate image takes a lot of time (usually over 1.5s).</param>
+        /// <returns>Returns the rendered image.</returns>
+        public Bitmap RenderImage(Action<Bitmap> periodicCallback, int minimumInterval = 0)
+        {
+            // Prepare frame buffer
+            frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
+
+            // Start render threads
+            Thread renderThread = new Thread(new ThreadStart(() => RunRenderThreads()));
+            renderThread.Start();
+
+            // Perform periodic callbacks while the threads are rendering
+            while(renderThread.IsAlive)
+            {
+                periodicCallback(GetIntermediateResult());
+                Thread.Sleep(minimumInterval);
+            }
+
+            renderThread.Join();
+
+            image.UnlockBits(frameBuffer);
+            return image;
+        }
+
+        /// <summary>
+        /// Starts the rendering threads according to the render settings and only returns when all rendering threads have terminated.
+        /// Important: The Framebuffer has to be initialized beforehand.
+        /// </summary>
+        private void RunRenderThreads()
+        {
             // Start threads with the correct sections
             Thread[] threads = new Thread[settings.AmountThreads];
             for (int i = 0; i < settings.AmountThreads; i++)
@@ -56,11 +100,27 @@ namespace ESRT.Rendering
             {
                 threads[i].Join();
             }
+        }
 
-            // Convert buffer back to Bitmap
-            image.UnlockBits(frameBuffer);
+        /// <summary>
+        /// Copies the current framebuffer into a new bitmap that can be unlocked and returned.
+        /// Important: The Framebuffer has to be initialized beforehand.
+        /// </summary>
+        /// <returns>Returns a bitmap containing a copy of the current framebuffer state.</returns>
+        private Bitmap GetIntermediateResult()
+        {
+            Bitmap intermediateResult = new Bitmap(settings.Resolution.width, settings.Resolution.height, PixelFormat.Format24bppRgb);
+            BitmapData intermediateData = intermediateResult.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            byte* intermediateDataPointer = (byte*)intermediateData.Scan0.ToPointer();
 
-            return image;
+            for (int i = 0; i < image.Width * image.Height * 3; i++)
+            {
+                intermediateDataPointer[i] = bufferPointer[i];
+            }
+
+            intermediateResult.UnlockBits(intermediateData);
+
+            return intermediateResult;
         }
     }
 }
