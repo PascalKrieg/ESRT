@@ -88,11 +88,11 @@ namespace ESRT.Rendering
             int sectionWidth = (settings.Resolution.width / settings.AmountThreads);
             for (int i = 0; i < settings.AmountThreads; i++)
             {
-                RenderSectionParameters renderSection = new RenderSectionParameters(bufferPointer,
+                RenderSection renderSection = new RenderSection(bufferPointer,
                     i * sectionWidth, (i + 1) * sectionWidth,
                     0, settings.Resolution.height, raytracer);
 
-                threads[i] = new Thread(new ThreadStart(renderSection.Execute));
+                threads[i] = new Thread(new ThreadStart(renderSection.CalculateSection));
                 threads[i].Start();
             }
 

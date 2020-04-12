@@ -12,7 +12,7 @@ namespace ESRT.Rendering
     /// Class that contains the information required to run the raytracer on a specific rectangle on the bitmap.
     /// After creation, the Execute method has to be called on a new thread.
     /// </summary>
-    unsafe class RenderSectionParameters
+    unsafe class RenderSection
     {
         byte* rawData;
         int startX, endX, startY, endY;
@@ -28,7 +28,7 @@ namespace ESRT.Rendering
         /// <param name="startY">The lower bound of the y values in the rectangle.</param>
         /// <param name="endY">The upper bound of the y values in the rectangle.</param>
         /// <param name="raytracer">The raytracer to be used to render the image.</param>
-        public RenderSectionParameters(byte* rawData, int startX, int endX, int startY, int endY, Raytracer raytracer)
+        public RenderSection(byte* rawData, int startX, int endX, int startY, int endY, Raytracer raytracer)
         {
             this.rawData = rawData;
             this.startX = startX;
@@ -42,7 +42,7 @@ namespace ESRT.Rendering
         /// Starts rendering the image in the assigned rectangle, using the given raytracer.
         /// The result will be written to the correct index at the rawData memory address.
         /// </summary>
-        public void Execute()
+        public void CalculateSection()
         {
             for (int y = startY; y < endY; y++)
             {
