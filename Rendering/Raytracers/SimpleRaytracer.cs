@@ -24,7 +24,7 @@ namespace ESRT.Rendering
 
         protected override Color calculateDefaultColor(Ray ray, HitData hitPoint)
         {
-            return Math.Max(0, (hitPoint.Normal * CurrentScene.MainCamera.ViewDirection)) * hitPoint.Material.Color(hitPoint.TextureCoords.u, hitPoint.TextureCoords.v);
+            return Math.Max(0, hitPoint.Normal * -1 * CurrentScene.MainCamera.ViewDirection) * hitPoint.Material.Color(hitPoint.TextureCoords);
         }
 
         protected override Color calculateNoHitColor(Ray ray)
