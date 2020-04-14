@@ -43,7 +43,10 @@ namespace ESRT.Rendering
         /// <returns>Returns the rendered image.</returns>
         public Bitmap RenderImage()
         {
-            return RenderImage(new Action<Bitmap>((bitmap) => { } ), 0);
+            PrepareRendering();
+            RunRenderThreads();
+            image.UnlockBits(frameBuffer);
+            return image;
         }
 
         /// <summary>
@@ -59,11 +62,7 @@ namespace ESRT.Rendering
         /// <returns>Returns the rendered image.</returns>
         public Bitmap RenderImage(Action<Bitmap> periodicCallback, int minimumInterval = 0)
         {
-            // Prepare frame buffer
-            frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
-
-            sectionQueue = new ConcurrentQueue<RenderSection>();
+            PrepareRendering();
 
             // Start render threads
             Thread renderThread = new Thread(new ThreadStart(() => RunRenderThreads()));
@@ -72,14 +71,21 @@ namespace ESRT.Rendering
             // Perform periodic callbacks while the threads are rendering
             while(renderThread.IsAlive)
             {
-                periodicCallback(GetIntermediateResult());
                 Thread.Sleep(minimumInterval);
+                periodicCallback(GetIntermediateResult());
             }
 
             renderThread.Join();
 
             image.UnlockBits(frameBuffer);
             return image;
+        }
+
+        private void PrepareRendering()
+        {
+            frameBuffer = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            bufferPointer = (byte*)frameBuffer.Scan0.ToPointer();
+            sectionQueue = new ConcurrentQueue<RenderSection>();
         }
 
         /// <summary>
