@@ -27,17 +27,20 @@ namespace ESRT.Entities
         /// </summary>
         public float Radius { get; set; }
 
+        public bool CastShadows { get; private set; }
+
         /// <summary>
         /// Constructs a new sphere.
         /// </summary>
         /// <param name="material"> The material of the Spere.</param>
         /// <param name="center">The center of the Sphere.</param>
         /// <param name="radius">The radius of the sphere.</param>
-        public Sphere(Material material, Vector3 center, float radius)
+        public Sphere(Material material, Vector3 center, float radius, bool castShadows = true)
         {
             this.material = material;
             Center = center;
             Radius = radius;
+            CastShadows = castShadows;
         }
 
         public bool Intersect(Ray ray, out HitData hitData)

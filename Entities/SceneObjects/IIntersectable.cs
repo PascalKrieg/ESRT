@@ -18,5 +18,10 @@ namespace ESRT.Entities
         /// <param name="hitData">Output of the hit data of the closest hit.</param>
         /// <returns>Returns true, if there is an intersection with the object, false otherwise.</returns>
         bool Intersect(Ray ray, out HitData hitData);
+
+        /// <summary>
+        /// Indicates whether this object should be ignored on shadow ray intersection tests.
+        /// </summary>
+        bool CastShadows { get; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ESRT.Entities;
+using ESRT.Entities;
 using ESRT.Entities.Lighting;
 using System;
 using System.Collections.Generic;
@@ -87,7 +87,7 @@ namespace ESRT.Rendering
                 shadowRayDirection.Normalize();
                 Vector3 offsettedStartPosition = closestHit.Position + Settings.SecondaryRayOffset * shadowRayDirection;
 
-                bool isOccluded = CurrentScene.Intersect(offsettedStartPosition, light.Position, out HitData shadowRayHit);
+                bool isOccluded = CurrentScene.Intersect(offsettedStartPosition, light.Position, out HitData shadowRayHit, true);
                 color += calculateColorPerLight(ray, closestHit, light, isOccluded);
             });
 

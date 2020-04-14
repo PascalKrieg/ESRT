@@ -56,13 +56,16 @@ namespace ESRT.Rendering
         /// <param name="hitData">The hit data of the closest hit that will be written out if there is an intersection.
         /// Will output HitData.NoHit otherwise and can be checked with the exists() method on the object.</param>
         /// <returns>Returns true, if there is an intersection with at least one scene object, false otherwise.</returns>
-        public bool Intersect(Ray ray, out HitData hitData)
+        public bool Intersect(Ray ray, out HitData hitData, bool isShadowRay = false)
         {
             // TODO: Use acceleration Data structures
             HitData closestHit = HitData.NoHit;
             HitData lastHit;
             ObjectList.ForEach((IIntersectable) =>
             {
+                if (isShadowRay && IIntersectable.CastShadows == false)
+                    return;
+
                 if (IIntersectable.Intersect(ray, out lastHit))
                 {
                     if (!closestHit.exists() && lastHit.exists())
@@ -91,11 +94,11 @@ namespace ESRT.Rendering
         /// Will output HitData.NoHit if there was no hit at all, which can be checked with the exists() method on the object.</param>
         /// <returns>Returns true, if there is an intersection with at least one scene object 
         /// between startPosition and targetPosition, false otherwise.</returns>
-        public bool Intersect(Vector3 startPosition, Vector3 targetPosition, out HitData hitData)
+        public bool Intersect(Vector3 startPosition, Vector3 targetPosition, out HitData hitData, bool isShadowRay = false)
         {
             Ray ray = new Ray(startPosition, targetPosition - startPosition);
 
-            if (Intersect(ray, out HitData hit))
+            if (Intersect(ray, out HitData hit, isShadowRay))
             {
                 hitData = hit;
                 return (startPosition.Distance(hit.Position) < startPosition.Distance(targetPosition));
