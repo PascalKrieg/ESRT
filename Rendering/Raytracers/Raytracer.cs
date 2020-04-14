@@ -1,4 +1,4 @@
-using ESRT.Entities;
+﻿using ESRT.Entities;
 using ESRT.Entities.Lighting;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace ESRT.Rendering
         {
             int xSteps = x - (int)(Settings.Resolution.width / 2);
             int ySteps = y - (int)(Settings.Resolution.height / 2);
-            Vector3 result = distance * CurrentScene.MainCamera.ViewDirection + xSteps * sidewaysVector + ySteps * CurrentScene.MainCamera.Up;
+            Vector3 result = distance * CurrentScene.MainCamera.ViewDirection + xSteps * sidewaysVector + ySteps * - 1 * CurrentScene.MainCamera.Up;
             result.Normalize();
             return Trace(new Ray(CurrentScene.MainCamera.Position, result));
         }
