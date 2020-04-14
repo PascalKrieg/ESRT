@@ -99,12 +99,26 @@ namespace ESRT
         }
 
         /// <summary>
-        /// Converts the Color to a tuple of components, usually in intervals [0, 255]. The Values can ocassionaly be higher than 255.
+        /// Converts the Color to a tuple of components, in intervals [0, 255].
         /// </summary>
-        /// <returns>The tuple of components, usually in intervals [0, 255]</returns>
+        /// <returns>Returns the byte tuple of components in intervals [0, 255]</returns>
         public (byte r, byte g, byte b) To24BitRepresentation()
         {
-            return ((byte)Math.Round(r * 255), (byte)Math.Round(g * 255), (byte)Math.Round(b * 255));
+            (double r, double g, double b) color = (Math.Round(r * 255), Math.Round(g * 255), Math.Round(b * 255));
+            if (color.r > 255)
+                color.r = 255;
+            if (color.r < 0)
+                color.r = 0;
+            if (color.g > 255)
+                color.g = 255;
+            if (color.g < 0)
+                color.g = 0;
+            if (color.b > 255)
+                color.b = 255;
+            if (color.b < 0)
+                color.b = 0;
+
+            return ((byte)color.r, (byte)color.g, (byte)color.b);
         }
 
         public static Color Black { get => new Color(0, 0, 0); }
