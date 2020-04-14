@@ -37,7 +37,7 @@ namespace ESRT.Rendering
             CurrentScene = currentScene;
             Settings = settings;
 
-            distance = (float)Math.Tan((Math.PI / 360) * CurrentScene.MainCamera.FieldOfView) * Settings.Resolution.width / 2;
+            distance = Settings.Resolution.height / ((float)Math.Tan((Math.PI / 360) * CurrentScene.MainCamera.FieldOfView) * 2);
             CurrentScene.MainCamera.Up.Normalize();
             CurrentScene.MainCamera.ViewDirection.Normalize();
             sidewaysVector = CurrentScene.MainCamera.ViewDirection.CrossProduct(CurrentScene.MainCamera.Up);
