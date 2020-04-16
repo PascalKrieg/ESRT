@@ -221,6 +221,15 @@ namespace ESRT
             return (this - vec).Length;
         }
 
+        /// <summary>
+        /// Creates a string representation in the format (x, y, z).
+        /// </summary>
+        /// <returns>Returns the vector as a string.</returns>
+        public override string ToString()
+        {
+            return $"({x}, {y}, {z})";
+        }
+
         public static Vector3 operator+ (Vector3 vec1, Vector3 vec2)
         {
             return new Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
