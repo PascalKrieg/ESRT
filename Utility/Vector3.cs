@@ -79,18 +79,20 @@ namespace ESRT
         /// <summary>
         /// Shortens the vector to length 1 while still pointing in the same direction.
         /// </summary>
-        public void Normalize()
+        /// <returns>Returns the normalized version of the vector.</returns>
+        public Vector3 Normalize()
         {
             float currentLength = Length;
             if (currentLength < 0.001f)
             {
-                return;
+                return this;
             }
             x /= currentLength;
             y /= currentLength;
             z /= currentLength;
             lengthValue = 1f;
             isLengthDirty = false;
+            return this;
         }
 
         /// <summary>
