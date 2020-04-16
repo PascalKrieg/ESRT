@@ -56,7 +56,7 @@ namespace ESRT
         }
 
         private float lengthValue;
-        float Length
+        public float Length
         {
             get
             {
