@@ -28,7 +28,7 @@ namespace ESRT.Rendering
             Color diffuse = Color.Black;
             Color specular = Color.Black;
 
-            if (!isCovered && Settings.CastShadows)
+            if (!isCovered || !Settings.CastShadows)
             {
                 diffuse = lightIntensity
                     * Math.Max(hitPoint.Normal * (-1 * incomingLightDirection), 0)
@@ -47,11 +47,7 @@ namespace ESRT.Rendering
 
         protected override Color calculateDefaultColor(Ray ray, HitData hitPoint)
         {
-            if (Settings.CastShadows)
-            {
-                return Color.Black;
-            }
-            return hitPoint.Material.Color(hitPoint.TextureCoords);
+            return Color.Black;
         }
 
         protected override Color calculateNoHitColor(Ray ray)
