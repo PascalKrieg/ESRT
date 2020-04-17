@@ -58,7 +58,7 @@ namespace ESRT.Entities.Materials
             transmissive /= total;
         }
 
-        public ConstantMaterial(Color color, float ambient, float diffuse, float specular, float reflective, float transmissive)
+        public ConstantMaterial(Color color, Shading shadingMode, float ambient, float diffuse, float specular, float reflective, float transmissive) : base(shadingMode)
         {
             this.color = color;
             this.ambient = ambient;

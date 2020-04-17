@@ -65,7 +65,7 @@ namespace ESRT.Entities
                 if (noHit == null)
                 {
                     // Pink constant material
-                    Material mat = new ConstantMaterial(new Color(1, 0.07f, 0.576f), 1, 0, 0, 0, 0);
+                    Material mat = new ConstantMaterial(new Color(1, 0.07f, 0.576f), Shading.Flat, 1, 0, 0, 0, 0);
                     noHit = new HitData(Vector3.Zero, Vector3.Up, (0, 0), mat);
                 }
                 return noHit;

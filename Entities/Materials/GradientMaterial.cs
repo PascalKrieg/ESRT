@@ -45,7 +45,7 @@ namespace ESRT.Entities.Materials
             throw new NotImplementedException();
         }
 
-        public GradientMaterial(Vector3 color, float ambient, float diffuse, float specular, float reflective, float transmissive)
+        public GradientMaterial(Vector3 color, Shading shadingMode, float ambient, float diffuse, float specular, float reflective, float transmissive) : base(shadingMode)
         {
             this.color = color;
             this.ambient = ambient;

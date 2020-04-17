@@ -29,6 +29,11 @@ namespace ESRT.Entities.Materials
         }
 
         /// <summary>
+        /// The mode in which the object will be rendered.
+        /// </summary>
+        public Shading ShadingMode { get; set; }
+
+        /// <summary>
         /// Returns the ambient parameter at the texture coordinates.
         /// </summary>
         /// <param name="u">u coordinate</param>
@@ -111,6 +116,11 @@ namespace ESRT.Entities.Materials
         public float Reflective((float u, float v) textureCoords)
         {
             return Reflective(textureCoords.u, textureCoords.v);
+        }
+
+        protected Material(Shading shadingMode)
+        {
+            ShadingMode = shadingMode;
         }
     }
 }
