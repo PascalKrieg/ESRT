@@ -51,6 +51,7 @@
     <Compile Include="Entities\SceneObjects\Polygons\Triangle.cs" />
     <Compile Include="Entities\SceneObjects\Polygons\VertexData.cs" />
     <Compile Include="Entities\SceneObjects\IRenderableObject.cs" />
+    <Compile Include="Entities\SceneObjects\Transform.cs" />
     <Compile Include="Environment\IEnvironment.cs" />
     <Compile Include="Environment\SolidColorEnvironment.cs" />
     <Compile Include="Entities\Materials\ConstantMaterial.cs" />
