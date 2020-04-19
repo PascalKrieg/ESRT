@@ -8,8 +8,21 @@ using System.Threading.Tasks;
 
 namespace ESRT.Entities
 {
+    /// <summary>
+    /// Static helper class for simply creating complex polygon objects.
+    /// </summary>
     public static class SceneObjectCreator
     {
+
+        /// <summary>
+        /// Constructs a new polygon object.
+        /// </summary>
+        /// <param name="material">The material of the object.</param>
+        /// <param name="vertices">Vector3 array containing all vertices that will be used to construct the object.</param>
+        /// <param name="triangleVertexIndices">Array containing 3-tuples of integers.
+        /// Each tuple represents one triangle that is constructed out of the vertices in the vertices array at the three indices. </param>
+        /// <param name="triangleTextureCoords">Defines the texture coordinates for each vertex in every triangle. Optional.</param>
+        /// <returns>The constructed polygon object.</returns>
         public static IRenderableObject Construct(Material material,
             Vector3[] vertices,
             (int A, int B, int C)[] triangleVertexIndices,
@@ -77,6 +90,14 @@ namespace ESRT.Entities
             return new PolygonObject(triangleList, true, Vector3.Zero, Vector3.Zero);
         }
 
+        /// <summary>
+        /// Constructs a new polygon object.
+        /// </summary>
+        /// <param name="material">The material of the object.</param>
+        /// <param name="vertices">Vector3 array containing all vertices that will be used to construct the object.</param>
+        /// <param name="triangleVertexIndices">Array containing 3-tuples of integers.
+        /// Each tuple represents one triangle that is constructed out of the vertices in the vertices array at the three indices. </param>
+        /// <returns>The constructed polygon object.</returns>
         public static IRenderableObject Construct(Material material,
             Vector3[] vertices,
             (int A, int B, int C)[] triangleVertexIndices)
@@ -90,6 +111,13 @@ namespace ESRT.Entities
             return Construct(material, vertices, triangleVertexIndices, triangleTextureCoords);
         }
 
+        /// <summary>
+        /// Creates a cube.
+        /// </summary>
+        /// <param name="material">The material of the cube.</param>
+        /// <param name="position">The position of the cube in world space.</param>
+        /// <param name="sideLength">The side length of the cube.</param>
+        /// <returns>Returns the constructed cube.</returns>
         public static IRenderableObject CreateCube(Material material, Vector3 position, Vector3 sideLength)
         {
             Vector3 halfSideLength = 0.5f * sideLength;
@@ -121,6 +149,14 @@ namespace ESRT.Entities
             return result;
         }
 
+        /// <summary>
+        /// Creates a plane.
+        /// </summary>
+        /// <param name="material">The material of the plane.</param>
+        /// <param name="position">The position of the plane in world space.</param>
+        /// <param name="sizeX">The side length of the plane in x direction.</param>
+        /// <param name="sizeZ">The side length of the plane in z direction.</param>
+        /// <returns>Returns the constructed plane.</returns>
         public static IRenderableObject CreatePlane(Material material, Vector3 position, float sizeX, float sizeZ)
         {
             float halfSideLengthX = 0.5f * sizeX;

@@ -2,21 +2,56 @@
 
 namespace ESRT.Entities.SceneObjects.Polygons
 {
+    /// <summary>
+    /// Represents a single triangle that can be directly rendered or assembled with others to a polygon object.
+    /// </summary>
     public class Triangle : IIntersectable
     {
+        /// <summary>
+        /// The material of the triangle.
+        /// </summary>
         public Material Material { get; private set; }
 
+        /// <summary>
+        /// The vertex data of the first vertex (counter-clockwise).
+        /// </summary>
         public VertexData A { get; protected set; }
+        /// <summary>
+        /// The texture coordinates of the first vertex (counter-clockwise).
+        /// </summary>
         public (float u, float v) A_TextureCoords { get; protected set; }
 
+        /// <summary>
+        /// The vertex data of the second vertex (counter-clockwise).
+        /// </summary>
         public VertexData B { get; private set; }
+        /// <summary>
+        /// The texture coordinates of the second vertex (counter-clockwise).
+        /// </summary>
         public (float u, float v) B_TextureCoords { get; protected set; }
 
+        /// <summary>
+        /// The vertex data of the third vertex (counter-clockwise).
+        /// </summary>
         public VertexData C { get; private set; }
+        /// <summary>
+        /// The texture coordinates of the third vertex (counter-clockwise).
+        /// </summary>
         public (float u, float v) C_TextureCoords { get; protected set; }
 
         public bool CastShadows { get; private set; }
 
+        /// <summary>
+        /// Constructs a new triangle.
+        /// </summary>
+        /// <param name="material">The material of the triangle.</param>
+        /// <param name="castShadows">Whether the triangle will cast a shadow.</param>
+        /// <param name="a">The vertex data of the first vertex (counter-clockwise).</param>
+        /// <param name="b">The vertex data of the second vertex (counter-clockwise).</param>
+        /// <param name="c">The vertex data of the third vertex (counter-clockwise).</param>
+        /// <param name="a_TextureCoords">The texture coordinates of the first vertex (counter-clockwise).</param>
+        /// <param name="b_TextureCoords">The texture coordinates of the second vertex (counter-clockwise).</param>
+        /// <param name="c_TextureCoords">The texture coordinates of the third vertex (counter-clockwise).</param>
         public Triangle(Material material, bool castShadows,
             VertexData a, VertexData b, VertexData c,
             (float u, float v) a_TextureCoords, (float u, float v) b_TextureCoords, (float u, float v) c_TextureCoords)
@@ -70,11 +105,17 @@ namespace ESRT.Entities.SceneObjects.Polygons
             return true;
         }
 
+        /// <summary>
+        /// Calculates the normal of the triangle when using flat shading.
+        /// </summary>
         public Vector3 FlatNormal
         {
             get => (B.Position - A.Position).CrossProduct(C.Position - A.Position).Normalize();
         }
 
+        /// <summary>
+        /// Calculates the surface area of the triangle.
+        /// </summary>
         public float SurfaceArea
         {
             get

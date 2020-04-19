@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ESRT.Entities.SceneObjects.Polygons
 {
+    /// <summary>
+    /// Represents a object made out of triangles.
+    /// </summary>
     public class PolygonObject : IRenderableObject
     {
         private List<Triangle> triangles = new List<Triangle>();
@@ -13,6 +16,13 @@ namespace ESRT.Entities.SceneObjects.Polygons
         public bool CastShadows { get; set; }
         public Vector3 Position { get; set; }
 
+        /// <summary>
+        /// Constructs a new polygon object
+        /// </summary>
+        /// <param name="triangles">List containing the triangles in object coordinate space.</param>
+        /// <param name="castShadows">Whether the polygon object will cast shadows.</param>
+        /// <param name="position">The position of the polygon object. Can be considered as the center of the object coordinate space.</param>
+        /// <param name="rotation">The rotation of the object around the center of the object coordinate space. Currently not implemented.</param>
         public PolygonObject(List<Triangle> triangles, bool castShadows, Vector3 position, Vector3 rotation)
         {
             this.triangles = triangles;
