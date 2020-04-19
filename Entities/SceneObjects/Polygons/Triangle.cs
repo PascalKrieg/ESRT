@@ -68,6 +68,8 @@ namespace ESRT.Entities.SceneObjects.Polygons
 
         public bool Intersect(Ray ray, out HitData hitData)
         {
+            // Solve the following equation:
+            // ray.Start + t * ray.direction = lambda1 * A.Position + lambda2 * B.Position + lambda3 * C.Position
             Vector3 E = ray.Start - A.Position;
             Vector3 C1 = -1 * ray.Direction;
             Vector3 C2 = B.Position - A.Position;
@@ -79,6 +81,7 @@ namespace ESRT.Entities.SceneObjects.Polygons
 
             bool wasHit = result.lambda2 >= 0 && result.lambda3 >= 0 && result.lambda2 + result.lambda3 <= 1;
 
+            // The ray came from behind when t < 0. This will be used in transmission calculation.
             if (!wasHit || result.t < 0)
             {
                 hitData = HitData.NoHit;
