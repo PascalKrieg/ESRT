@@ -14,7 +14,7 @@ namespace ESRT.Rendering
     /// </summary>
     unsafe class RenderSection
     {
-        byte* rawData;
+        byte[] rawData;
         int startX, endX, startY, endY;
 
         private Raytracer raytracer;
@@ -23,13 +23,13 @@ namespace ESRT.Rendering
         /// <summary>
         /// Constructs the Object containing target bitmap, rectangle and raytracer to use.
         /// </summary>
-        /// <param name="rawData">Pointer to the first element of the bitmap raw data.</param>
+        /// <param name="rawData">Byte array.</param>
         /// <param name="startX">The lower bound of the x values in the rectangle.</param>
         /// <param name="endX">The upper bound of the x values in the rectangle.</param>
         /// <param name="startY">The lower bound of the y values in the rectangle.</param>
         /// <param name="endY">The upper bound of the y values in the rectangle.</param>
         /// <param name="raytracer">The raytracer to be used to render the image.</param>
-        public RenderSection(byte* rawData, int startX, int endX, int startY, int endY, Raytracer raytracer)
+        public RenderSection(byte[] rawData, int startX, int endX, int startY, int endY, Raytracer raytracer)
         {
             this.rawData = rawData;
             this.startX = startX;
@@ -48,7 +48,7 @@ namespace ESRT.Rendering
         /// <param name="startY">The lower bound of the y values in the rectangle.</param>
         /// <param name="endY">The upper bound of the y values in the rectangle.</param>
         /// <param name="raytracer">The raytracer to be used to render the image.</param>
-        public RenderSection(byte* rawData, int startX, int endX, int startY, int endY, Raytracer raytracer, OriginMode origin)
+        public RenderSection(byte[] rawData, int startX, int endX, int startY, int endY, Raytracer raytracer, OriginMode origin)
         {
             this.rawData = rawData;
             this.startX = startX;
@@ -77,9 +77,9 @@ namespace ESRT.Rendering
         {
             int offset = (3 * raytracer.Settings.Resolution.width * y) + 3 * x;
             (byte r, byte g, byte b) tristimulus = color.To24BitRepresentation();
-            *(rawData + offset) = tristimulus.b;
-            *(rawData + offset + 1) = tristimulus.g;
-            *(rawData + offset + 2) = tristimulus.r;
+            rawData[offset] = tristimulus.b;
+            rawData[offset + 1] = tristimulus.g;
+            rawData[offset + 2] = tristimulus.r;
         }
     }
 }

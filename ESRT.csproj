@@ -1,83 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4DBBAC9B-1520-4426-B2E1-DD41D30B3509}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ESRT</RootNamespace>
-    <AssemblyName>ESRT</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Entities\SceneObjects\ITransformable.cs" />
-    <Compile Include="Entities\SceneObjects\Polygons\PolygonObject.cs" />
-    <Compile Include="Entities\SceneObjects\Polygons\SceneObjectCreator.cs" />
-    <Compile Include="Entities\Materials\Shading.cs" />
-    <Compile Include="Entities\SceneObjects\Polygons\Triangle.cs" />
-    <Compile Include="Entities\SceneObjects\Polygons\VertexData.cs" />
-    <Compile Include="Entities\SceneObjects\IRenderableObject.cs" />
-    <Compile Include="Entities\SceneObjects\Transform.cs" />
-    <Compile Include="Environment\IEnvironment.cs" />
-    <Compile Include="Environment\SolidColorEnvironment.cs" />
-    <Compile Include="Entities\Materials\ConstantMaterial.cs" />
-    <Compile Include="Entities\Materials\GradientMaterial.cs" />
-    <Compile Include="Entities\SceneObjects\HitData.cs" />
-    <Compile Include="Entities\SceneObjects\IIntersectable.cs" />
-    <Compile Include="Entities\Lighting\ILight.cs" />
-    <Compile Include="Entities\Lighting\PointLight.cs" />
-    <Compile Include="Entities\Materials\Material.cs" />
-    <Compile Include="Entities\SceneObjects\Camera.cs" />
-    <Compile Include="Rendering\OriginMode.cs" />
-    <Compile Include="Rendering\Raytracers\Raytracer.cs" />
-    <Compile Include="Rendering\Raytracers\PhongRaytracer.cs" />
-    <Compile Include="Rendering\Renderer.cs" />
-    <Compile Include="Entities\SceneObjects\Sphere.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\RenderSection.cs" />
-    <Compile Include="Rendering\RenderSettings.cs" />
-    <Compile Include="Rendering\Scene.cs" />
-    <Compile Include="Rendering\Raytracers\SimpleRaytracer.cs" />
-    <Compile Include="Rendering\ArrayRenderer.cs" />
-    <Compile Include="Utility\Color.cs" />
-    <Compile Include="Utility\MathUtility.cs" />
-    <Compile Include="Utility\Matrix3x3.cs" />
-    <Compile Include="Utility\Ray.cs" />
-    <Compile Include="Utility\Vector3.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
